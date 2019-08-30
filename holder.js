@@ -6,48 +6,53 @@ function main(event){
     .then(res => res.json())
     .then(json => fillDoggoBar(json))
 
-    document.getElementById('good-dog-filter').addEventListener('click',filterGoodDogs)
+    //document.getElementById('good-dog-filter').addEventListener('click',filterGoodDogs)
 }
 
-function filterGoodDogs(event){
-    let filterButton = event.target
-    if (filterButton.getAttribute('filtering') != 'true'){
-        filterButton.setAttribute('filtering','true')
-        filterButton.textContent = 'Filter good dogs: ON'
-        fetch(DOGURL)
-        .then(res => res.json())
-        .then(json => json.filter(dog => dog.isGoodDog))
-        .then(goodbois => fillDoggoBar(goodbois))
+// function filterGoodDogs(event){
+//     console.log('filter dog called')
+//     let filterButton = event.target
+//     if (!filterButton.getAttribute('filtering')){
+//         console.log('filter')
+//         filterButton.setAttribute('filtering',true)
+
+//         fetch(DOGURL)
+//         .then(res => res.json())
+//         .then(json => json.filter(dog => dog.isGoodDog))
+//         .then(goodbois => fillDoggoBar(goodbois))
 
 
-    } else {
-        filterButton.textContent = 'Filter good dogs: OFF'
-        filterButton.setAttribute('filtering','false')
-        fetch(DOGURL)
-        .then(res => res.json())
-        .then(json => fillDoggoBar(json))
-    }
-}
+//     } else {
+//         console.log('unfilter')
+//         filterButton.setAttribute('filtering',false)
+//         fetch(DOGURL)
+//         .then(res => res.json())
+//         .then(json => fillDoggoBar(json))
+//     }
+// }
 
 function fillDoggoBar(json){
-    let dogBar = document.getElementById("dog-bar") 
+    let dogcontainer = document.createElement("span");
 
-    while (!!dogBar.firstChild){
-        dogBar.removeChild(dogBar.firstChild);
-    }
-
+    // while (!!dogcontainer.firstChild){
+    //     console.log('removed dog')
+    //     dogcontainer.removeChild(dogcontainer.firstChild);
+    // }
+    console.log(json)
     json.forEach(dog => {
-        let dogcontainer = document.createElement("span");
+        console.log(dog)
         dogcontainer.setAttribute('dog-id',dog.id);
         dogcontainer.textContent = dog.name;
-        dogBar.appendChild(dogcontainer)
+        document.getElementById("dog-bar") .appendChild(dogcontainer)
         dogcontainer.addEventListener('click',clickDog)
     });
 }
 
 function clickDog(event){
     let dogId = event.target.getAttribute("dog-id");
+    console.log(dogId)
     let address = `http://localhost:3000/pups/${dogId}`
+    console.log(address)
     fetch(address)
     .then(res => res.json())
     .then(json => showDog(json))
@@ -56,9 +61,9 @@ function clickDog(event){
 function showDog(json){
     
     let dogHolder = document.getElementById("dog-info");
-    while (!!dogHolder.firstChild){
-        dogHolder.removeChild(dogHolder.firstChild);
-    }
+    // while (!!dogHolder.firstChild){
+    //     dogHolder.removeChild(dogHolder.firstChild);
+    // }
     
     dogHolder.setAttribute('dog-id',json.id)
 
